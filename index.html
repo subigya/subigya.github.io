@@ -1,13 +1,290 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Subigya Shakya - Subi</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subigya Shakya - Subi</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+
+  </style>
+  <style type="text/css">
+    .hover-style {
+      position: relative;
+      z-index: 1;
+      color: #222 !important;
+      text-shadow: 0 1px 4px rgba(255, 255, 255, 0.25);
+      transition: transform 0.2s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .hover-style:hover {
+      transform: translateX(1px);
+    }
+
+    .hover-style:before {
+      content: "";
+      display: block;
+      position: absolute;
+      width: calc(100% + 1.5rem);
+      height: calc(100% + .5rem);
+      top: -.25rem;
+      left: -.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      border-radius: .75rem;
+      /* background: rgba(255,255,255,0.15); */
+      /* backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px); */
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      transition: opacity 0.4s cubic-bezier(.4, 0, .2, 1), transform 0.4s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .hover-style:hover:before {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .page-animate {
+      opacity: 0;
+      transform: translateY(40px);
+      filter: blur(16px);
+      transition: opacity 0.8s cubic-bezier(.4, 0, .2, 1), transform 0.8s cubic-bezier(.4, 0, .2, 1), filter 0.8s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .page-animate.page-animate-in {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  </style>
+  <script>
+    // Shared hover overlay for .hover-style elements
+    document.addEventListener('DOMContentLoaded', function () {
+      const overlay = document.createElement('div');
+      overlay.className = 'shared-hover-overlay';
+      overlay.style.position = 'absolute';
+      overlay.style.pointerEvents = 'none';
+      overlay.style.transition = 'opacity 0.4s cubic-bezier(.4,0,.2,1), left 0.3s cubic-bezier(.4,0,.2,1), top 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1), height 0.3s cubic-bezier(.4,0,.2,1), transform 0.3s cubic-bezier(.4,0,.2,1)';
+      overlay.style.opacity = '0';
+      overlay.style.zIndex = '100';
+      overlay.style.border = '1px solid rgba(255,255,255,0.25)';
+      overlay.style.boxShadow = '0 8px 32px 0 rgba(31, 38, 135, 0.15)';
+      overlay.style.borderRadius = '1rem';
+      overlay.style.background = 'rgba(255,255,255,0.18)';
+      overlay.style.backdropFilter = 'blur(12px)';
+      overlay.style.webkitBackdropFilter = 'blur(12px)';
+      overlay.style.mixBlendMode = 'lighten';
+      overlay.style.pointerEvents = 'none';
+      document.body.appendChild(overlay);
+
+      let currentHovered = null;
+      let fadeTimeout;
+      let mouseX = 0, mouseY = 0;
+
+      function updateOverlay(target, event) {
+        const rect = target.getBoundingClientRect();
+        overlay.style.width = rect.width + 'px';
+        overlay.style.height = rect.height + 'px';
+        overlay.style.left = (rect.left + window.scrollX) + 'px';
+        overlay.style.top = (rect.top + window.scrollY) + 'px';
+        overlay.style.transform = 'scale(1)';
+        overlay.style.opacity = '1';
+        if (event) {
+          mouseX = event.clientX;
+          mouseY = event.clientY;
+        }
+      }
+
+      hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', function (e) {
+          clearTimeout(fadeTimeout);
+          currentHovered = el;
+          updateOverlay(el, e);
+        });
+        el.addEventListener('mousemove', function (e) {
+          updateOverlay(el, e);
+        });
+        el.addEventListener('mouseleave', function (e) {
+          // Only fade out if not moving to another .hover-style element
+          const related = e.relatedTarget;
+          if (related && (related.classList && related.classList.contains('hover-style') || related.closest && related.closest('.hover-style'))) {
+            return;
+          }
+          currentHovered = null;
+          fadeTimeout = setTimeout(() => {
+            if (!currentHovered) {
+              overlay.style.opacity = '0';
+              overlay.style.transform = 'scale(0.98)';
+            }
+          }, 10);
+        });
+      });
+    });
+  </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () {
+        var main = document.querySelector('.page-animate');
+        if (main) main.classList.add('page-animate-in');
+      }, 100);
+    });
+  </script>
 </head>
-<body>
-    <h1>Test</h1>
-    
+
+<body class="">
+
+  <div class="md:flex md:flex-row md:justify-center">
+
+    <div class="md:min-w-[512px] md:w-full md:max-w-2xl md:mx-auto">
+
+      <div class="flex flex-col justify-start max-w-2xl px-8 py-24">
+
+        <div class="flex flex-col justify-start max-w-2xl px-8 py-24">
+
+          <div class="flex flex-col gap-12 origin-left">
+
+            <div class="flex flex-row gap-4 items-center -ml-16">
+
+              <div class="h-12 w-12 profile-image">
+                <a aria-label="Go to Homepage" href="#">
+                  <img alt="Subigya Shakya Logo" src="_img/_profile/subi-subigya-shakya.jpg" width="200" height="200"
+                    class="rounded-full" />
+                </a>
+              </div>
+
+              <div>
+                <h1 class="font-bold">Subigya Shakya (Subi)</h1>
+                <h2>Product, User Experience and User Interface</h2>
+              </div>
+
+            </div>
+
+            <div>
+              <ul class="flex flex-row gap-4">
+                <li><a href="about.html"
+                    class="text-zinc-400 underline underline-offset-2 decoration-zinc-200">About</a></li>
+                <li><a href="connect.html"
+                    class="text-zinc-400 underline underline-offset-2 decoration-zinc-200">Connect</a></li>
+                <li><a href="resume_subi_2025.pdf"
+                    class="text-zinc-400 underline underline-offset-2 decoration-zinc-200">Resumé</a></li>
+              </ul>
+            </div>
+
+            <div class="flex flex-col page-animate gap-10">
+
+              <div class="flex flex-col gap-2">
+                <h3 class="text-xs uppercase text-zinc-400">Samples</h3>
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-col gap-1 inline w-fit">
+                    <a href="https://patents.google.com/patent/US11895942B2/en" target="_blank" rel="noopener noreferrer"
+                      class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">GE Healthcare - Command Center Platform
+                      </h4>
+                      <p class="text-sm text-zinc-400">2014&ndash;present</p>
+                    </a>
+                  </div>
+
+                  <div class="flex flex-col gap-1 inline w-fit">
+                    <a href="https://patents.google.com/patent/US11895942B2/en" target="_blank" rel="noopener noreferrer"
+                      class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">Industrial Smart - EarthScout IoT
+                        Platform</h4>
+                      <p class="text-sm text-zinc-400">2014&ndash;present</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <h3 class="text-xs uppercase text-zinc-400">Patent</h3>
+                <div class="flex flex-col gap-4">
+
+                  <div class="inline w-fit">
+                    <a href="https://patents.google.com/patent/US11895942B2/en" target="_blank" rel="noopener noreferrer"
+                      class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">Plant Growth Platform</h4>
+                      <p class="text-sm text-zinc-400">EarthScout &middot; US11895942B2</p>
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <h3 class="text-xs uppercase text-zinc-400">Links</h3>
+                <div class="flex flex-col gap-4">
+                  <div class="inline w-fit">
+                    <a href="https://ensue.us" target="_blank" rel="noopener noreferrer" class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">Ensue LLC</h4>
+                      <p class="text-sm text-zinc-400">2014&ndash;present</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://www.gehccommandcenter.com/" target="_blank" rel="noopener noreferrer"
+                      class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">GE Healthcare - Command Center</h4>
+                      <p class="text-sm text-zinc-400">2014&ndash;present</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://www.earthscout.com/" target="_blank" rel="noopener noreferrer" class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">Industrial Smart - EarthScout IoT</h4>
+                      <p class="text-sm text-zinc-400">2017&ndash;present</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://www.ul.com/" target="_blank" rel="noopener noreferrer" class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">UL Solutions</h4>
+                      <p class="text-sm text-zinc-400">2024&ndash;2025</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://www.learnyourbenefits.com/" target="_blank" rel="noopener noreferrer"
+                      class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">Learn Your Worklife/Benefits</h4>
+                      <p class="text-sm text-zinc-400">2018&ndash;present</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://med.uth.edu/" target="_blank" rel="noopener noreferrer" class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">UTHealth - McGovern Medical School</h4>
+                      <p class="text-sm text-zinc-400">2011&ndash;2015</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://www.utphysicians.com/" target="_blank" rel="noopener noreferrer" class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">UTPhysicians</h4>
+                      <p class="text-sm text-zinc-400">part of UTHealth</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://www.designatwork.com/" target="_blank" rel="noopener noreferrer" class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">Design At Work</h4>
+                      <p class="text-sm text-zinc-400">2009&ndash;2011</p>
+                    </a>
+                  </div>
+                  <div class="inline w-fit">
+                    <a href="https://www.amdesigngroup.com/" target="_blank" rel="noopener noreferrer"
+                      class="hover-style">
+                      <h4 class="underline underline-offset-2 decoration-zinc-200">A.M. Design Group</h4>
+                      <p class="text-sm text-zinc-400">2008</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
 </body>
+
 </html>
