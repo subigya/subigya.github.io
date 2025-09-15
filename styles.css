@@ -80,3 +80,92 @@
     background-position: 0% 50%;
     }
 }
+
+
+/* Updated popover styles to enable fade-in, fade-out, and motion */
+    .image-popover {
+      position: absolute;
+      /* Changed to absolute for relative positioning */
+      z-index: 1000;
+      visibility: hidden;
+      /* Use visibility instead of display:none */
+      opacity: 0;
+      /* Start hidden */
+      /* width: 576px; */
+      height: auto;
+      /* max-height: 384px; */
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      background: #fff;
+      overflow: hidden;
+      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+      /* Smooth fade and motion */
+      transform: translateY(20px);
+      /* Start with downward motion */
+      filter: blur(8px);
+      /* Start blurred */
+    }
+
+    .image-popover img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .image-popover.show {
+      visibility: visible;
+      /* Make visible */
+      opacity: 1;
+      /* Fade in */
+      transform: translateY(0);
+      /* Remove motion */
+      filter: blur(0);
+      /* Remove blur */
+    }
+
+    .page-animate {
+      position: relative;
+      /* Ensure .page-animate is the positioning context */
+    }
+
+    /* Add fade-in and fade-out effect for the popover */
+    .image-popover {
+      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+      /* Ensure smooth fade and transform */
+      opacity: 0;
+      /* Start hidden */
+    }
+
+    .image-popover.show {
+      opacity: 1;
+      /* Fade in */
+    }
+
+    /* Ensure fade-out animation works */
+    .image-popover {
+      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+      /* Smooth fade and motion */
+      opacity: 0;
+      /* Default hidden state */
+      visibility: hidden;
+      /* Ensure it's hidden when not shown */
+    }
+
+    .image-popover.show {
+      opacity: 1;
+      /* Fade in */
+      visibility: visible;
+      /* Make visible */
+      transform: translateY(0);
+      /* Remove motion */
+      filter: blur(0);
+      /* Remove blur */
+    }
+
+    .image-popover:not(.show) {
+      opacity: 0;
+      /* Fade out */
+      visibility: hidden;
+      /* Hide after fade-out */
+    }

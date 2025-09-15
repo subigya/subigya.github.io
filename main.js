@@ -67,3 +67,75 @@
         if (main) main.classList.add('page-animate-in');
       }, 100);
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Create the popover element
+      const popover = document.createElement('div');
+      popover.className = 'image-popover';
+      const popoverImage = document.createElement('img');
+      popover.appendChild(popoverImage);
+      document.querySelector('.page-animate').appendChild(popover); // Append to .page-animate
+
+      // Default sizes for portrait and landscape orientations
+      const sizes = {
+        portrait: { width: '243px', height: '526px' },
+        landscape: { width: '384px', height: '256px' },
+      };
+
+      // Function to check if the screen is large enough
+      const isLargeScreen = () => window.innerWidth > 1024;
+
+      // Event listeners for hover-show links
+      const hoverLinks = document.querySelectorAll('.hover-show');
+      hoverLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          if (!isLargeScreen()) return; // Disable on small screens
+
+          const targetImage = link.getAttribute('data-image'); // Get the target image from data-image attribute
+          const orientation = link.getAttribute('data-orientation') || 'landscape'; // Default to landscape
+
+          if (targetImage) {
+            popoverImage.src = targetImage;
+
+            // Dynamically set the size based on orientation
+            const { width, height } = sizes[orientation] || sizes.landscape;
+            popover.style.width = width;
+            popover.style.height = height;
+
+            // Ensure inline styles take precedence
+            popover.style.setProperty('width', width, 'important');
+            popover.style.setProperty('height', height, 'important');
+
+            // Position relative to the hovered trigger element
+            const triggerRect = link.getBoundingClientRect();
+            popover.style.right = `-${parseInt(width) / 1.25}px`;
+            popover.style.top = `0px`;
+
+            // Cancel any ongoing fade-out animation
+            clearTimeout(popover.fadeTimeout);
+
+            // Reset animation state
+            popover.classList.remove('show');
+            setTimeout(() => {
+              popover.classList.add('show');
+            }, 10); // Slight delay to re-trigger animation
+          }
+        });
+
+        link.addEventListener('mouseleave', () => {
+          if (!isLargeScreen()) return; // Disable on small screens
+
+          // Add a delay before hiding to allow for smooth transitions
+          popover.fadeTimeout = setTimeout(() => {
+            popover.classList.remove('show');
+          }, 50); // Short delay to ensure animation plays
+        });
+      });
+
+      // Hide the popover on window resize if the screen becomes small
+      window.addEventListener('resize', () => {
+        if (!isLargeScreen()) {
+          popover.classList.remove('show');
+        }
+      });
+    });
