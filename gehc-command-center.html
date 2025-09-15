@@ -5,165 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subigya Shakya - Subi</title>
+  <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <style type="text/tailwindcss">
-
-  </style>
-  <style type="text/css">
-    .hover-style {
-      position: relative;
-      z-index: 1;
-      color: #222 !important;
-      text-shadow: 0 1px 4px rgba(255, 255, 255, 0.25);
-      transition: transform 0.2s cubic-bezier(.4, 0, .2, 1);
-    }
-
-    .hover-style:hover {
-      transform: translateX(1px);
-    }
-
-    .hover-style:before {
-      content: "";
-      display: block;
-      position: absolute;
-      width: calc(100% + 1.5rem);
-      height: calc(100% + .5rem);
-      top: -.25rem;
-      left: -.75rem;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-      border-radius: .75rem;
-      /* background: rgba(255,255,255,0.15); */
-      /* backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px); */
-      opacity: 0;
-      transform: translateY(20px) scale(0.98);
-      transition: opacity 0.4s cubic-bezier(.4, 0, .2, 1), transform 0.4s cubic-bezier(.4, 0, .2, 1);
-    }
-
-    .hover-style:hover:before {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .page-animate {
-      opacity: 0;
-      transform: translateY(40px);
-      filter: blur(16px);
-      transition: opacity 0.8s cubic-bezier(.4, 0, .2, 1), transform 0.8s cubic-bezier(.4, 0, .2, 1), filter 0.8s cubic-bezier(.4, 0, .2, 1);
-    }
-
-    .page-animate.page-animate-in {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }
-
-    /* Updated animated gradient border for profile image */
-    .profile-image-wrap {
-      display: inline-block;
-      padding: 1px;
-      /* Adjusted thickness of the animated border */
-      border-radius: 50%;
-      background: linear-gradient(90deg, #ff7a18, #af002d, #319197, #ff7a18);
-      background-size: 300% 300%;
-      animation: gradientShift 3s ease infinite;
-    }
-
-    .profile-image {
-      display: block;
-      object-fit: cover;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    @keyframes gradientShift {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-  </style>
-  <script>
-    // Shared hover overlay for .hover-style elements
-    document.addEventListener('DOMContentLoaded', function () {
-      const overlay = document.createElement('div');
-      overlay.className = 'shared-hover-overlay';
-      overlay.style.position = 'absolute';
-      overlay.style.pointerEvents = 'none';
-      overlay.style.transition = 'opacity 0.4s cubic-bezier(.4,0,.2,1), left 0.3s cubic-bezier(.4,0,.2,1), top 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1), height 0.3s cubic-bezier(.4,0,.2,1), transform 0.3s cubic-bezier(.4,0,.2,1)';
-      overlay.style.opacity = '0';
-      overlay.style.zIndex = '100';
-      overlay.style.border = '1px solid rgba(255,255,255,0.25)';
-      overlay.style.boxShadow = '0 8px 32px 0 rgba(31, 38, 135, 0.15)';
-      overlay.style.borderRadius = '1rem';
-      overlay.style.background = 'rgba(255,255,255,0.18)';
-      overlay.style.backdropFilter = 'blur(12px)';
-      overlay.style.webkitBackdropFilter = 'blur(12px)';
-      overlay.style.mixBlendMode = 'lighten';
-      overlay.style.pointerEvents = 'none';
-      document.body.appendChild(overlay);
-
-      let currentHovered = null;
-      let fadeTimeout;
-      let mouseX = 0, mouseY = 0;
-
-      function updateOverlay(target, event) {
-        const rect = target.getBoundingClientRect();
-        overlay.style.width = rect.width + 'px';
-        overlay.style.height = rect.height + 'px';
-        overlay.style.left = (rect.left + window.scrollX) + 'px';
-        overlay.style.top = (rect.top + window.scrollY) + 'px';
-        overlay.style.transform = 'scale(1)';
-        overlay.style.opacity = '1';
-        if (event) {
-          mouseX = event.clientX;
-          mouseY = event.clientY;
-        }
-      }
-
-      hoverElements.forEach(el => {
-        el.addEventListener('mouseenter', function (e) {
-          clearTimeout(fadeTimeout);
-          currentHovered = el;
-          updateOverlay(el, e);
-        });
-        el.addEventListener('mousemove', function (e) {
-          updateOverlay(el, e);
-        });
-        el.addEventListener('mouseleave', function (e) {
-          // Only fade out if not moving to another .hover-style element
-          const related = e.relatedTarget;
-          if (related && (related.classList && related.classList.contains('hover-style') || related.closest && related.closest('.hover-style'))) {
-            return;
-          }
-          currentHovered = null;
-          fadeTimeout = setTimeout(() => {
-            if (!currentHovered) {
-              overlay.style.opacity = '0';
-              overlay.style.transform = 'scale(0.98)';
-            }
-          }, 10);
-        });
-      });
-    });
-  </script>
-  <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      setTimeout(function () {
-        var main = document.querySelector('.page-animate');
-        if (main) main.classList.add('page-animate-in');
-      }, 100);
-    });
-  </script>
+  <script src="main.js"></script>
 </head>
 
 <body class="">
@@ -196,110 +40,125 @@
 
             </div>
 
-            <div>
-              <ul class="flex flex-row gap-5">
-                <li><a href="#" class="text-neutral-800 font-bold">GE Healthcare Command Center</a></li>
-                
-              </ul>
-            </div>
+            <article class="flex flex-col page-animate">
 
-            <div class="flex flex-col page-animate">
-              <div class="flex flex-col">
-                <div class="flex flex-col gap-1 inline w-fit">
-                  <article>
+              <header class="flex flex-col mb-10">
+                <h3 class="text-xs uppercase text-zinc-400">Case Study</h3>
+                <h1 class="text-neutral-800 font-bold">GE Healthcare Command Center</h1>
+              </header>
 
-                    <p class="mb-4">Over 11 years, I&rsquo;ve shaped the GE Healthcare Command Center, an AI-powered platform transforming hospital operations with real-time patient flow insights. As UX and UI Designer and Developer, I co-designed the Command Center platform.</p>
-                    <p><strong>Project Scope:</strong> Full platform UX and UI design and frontend development</p> 
-                    <p><strong>My Role:</strong> UX and UI design, prototyping, and development (non-js based).</p>
-                    <p class=""><strong>Team:</strong> 2-person design team, collaborating with developers, engineers, product owners, and stakeholders</p>
-                    
-                    <div class="my-10">
-                        <img src="assets/gehc-command-center/gehc-command-center-main.jpg" alt="GE Healthcare Command Center Dashboard" class="rounded-lg shadow-lg"/>
-                    </div>
-
-                    <h2 class="mb-4 font-bold text-xl">The Challenge: Overcoming High-Stakes Hurdles</h2>
-                    <p class="mb-4">Hospitals struggle with real-time patient flow, bed capacity, and resource management. Leadership teams need a unified, actionable view of critical data without being overwhelmed. Hospital admins and clinicians—needed intuitive tools amid resource strain.</p>
-                    <p class="mb-4">As part of a 2-person design team, I was responsible for designing the entire Command Center platform — from the foundational design system to the individual modules. This included dashboards, main tile modules and companion configuration modules, notifications & alerts, data visualizations, interfaces for both desktop/tablet, mobile(some) and large-scale wall displays and an icon library to complement medical and system alerts.</p>
+                <main class="flex flex-col">
+                  <div class="flex flex-col">
+                    <div class="flex flex-col gap-1 inline w-fit">
                       
-                    
-                    <p class="">The platform comprises 39 main tiles (modules) plus additional configuration and specialized modules, making this a large-scale, end-to-end design effort. <span class="italic text-zinc-400">(Digital Twin component not in my scope.)</span></p>
-                    
-                    <div class="my-10">
-                        <img src="assets/gehc-command-center/gehc-cc-meeting.jpeg" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/>
+                        <p class="mb-4">Over 11 years, I&rsquo;ve shaped the GE Healthcare Command Center, an AI-powered platform transforming hospital operations with real-time patient flow insights. As UX and UI Designer and Developer, I co-designed the Command Center platform.</p>
+                        <p><strong>Project Scope:</strong> Full platform UX and UI design and frontend development</p> 
+                        <p><strong>My Role:</strong> UX and UI design, prototyping, and development (non-js based).</p>
+                        <p class=""><strong>Team:</strong> 2-person design team (core), upto 4 designers, collaborating with developers, engineers, product owners, and stakeholders</p>
+                        
+                        <div class="my-10 relative">
+                            <img src="assets/gehc-command-center/gehc-command-center-main.jpg" alt="GE Healthcare Command Center Dashboard" class="rounded-lg shadow-lg"/>
+                            <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: d3.harvard.edu</span>
+                        </div>
+
+                        <h2 class="mb-4 font-bold text-xl">The Challenge: Overcoming High-Stakes Hurdles</h2>
+                        <p class="mb-4">Hospitals struggle with real-time patient flow, bed capacity, and resource management. Leadership teams need a unified, actionable view of critical data without being overwhelmed. Hospital admins and clinicians—needed intuitive tools amid resource strain.</p>
+                        <p class="mb-4">As part of a 2-person core design team, I was responsible for co-designing the entire Command Center platform — from the foundational design system to the individual modules. This included dashboards, main tile modules and companion configuration modules, notifications & alerts, data visualizations, interfaces for both desktop/tablet, mobile(some) and large-scale wall displays and an icon library to complement medical and system alerts.</p>
+                          
+                        
+                        <p class="">The platform comprises of more than 39 main tiles (modules) plus additional configuration and specialized modules, making this a large-scale, end-to-end design effort. <span class=" text-sm italic text-zinc-400">(Digital Twin component not in my scope.)</span></p>
+                        
+                        <div class="my-10 relative">
+                            <img src="assets/gehc-command-center/healthtechmagazine.net-3.webp" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/>
+                            <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: healthtechmagazine.net</span>
+                        </div>
+
+                        <h2 class="font-bold text-xl mb-2">Process</h2>
+                        <ul class="list-disc list-inside">
+                          <li>Started with ideas → sketches → wireframes → prototypes.</li>
+                          <li>Iterated with engineers, product owners, and stakeholders until validated.</li>
+                          <li>Conducted an on-site visit to Humber River Hospital (Toronto) after initial development to observe workflows and interview staff — insights confirmed design choices and highlighted areas for improvement.</li>
+                        </ul>
+
+                        <div class="my-10 relative">
+                            <img src="assets/gehc-command-center/bizjournals.com-5.webp" alt="GE Healthcare Command Center" class="rounded-lg shadow-lg"/>
+                            <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: bizjournals.com</span>
+                        </div>
+
+                        <h2 class="font-bold text-xl mb-2">Key Solutions and Design Decisions</h2>
+                        <ul class="list-disc list-inside">
+                          <li><strong>Tile System:</strong> 39+ tiles modules used visualizations, iconography, whitespace and hierarchial typography for clarity.</li>
+                          <li><strong>Criticality Encoding:</strong> Icons with badges and color coded context to drive attention, shining at trade shows.</li>
+                          <li><strong>Typography & Hierarchy:</strong> With most tiles being content-heavy, emphasis on clear typography, visual hierarchy, and white space to reduce cognitive load.</li>
+                          <li><strong>Clarity Over Complexity:</strong> Simplified the presentation of massive real-time datasets, ensuring information remained actionable instead of overwhelming.</li>
+                          <li><strong>Context-Aware Views:</strong> Responsive layouts balanced dense data for desktop and physical use.</li>
+                          <li><strong>Iconography:</strong> Built a local dynamic library of more than 700+ icons.</li>
+                        </ul>
+
+                        <div class="my-10 relative">
+                            <img src="assets/gehc-command-center/gehealthcare.com-2.webp" alt="GE Healthcare Command Center" class="rounded-lg shadow-lg"/>
+                            <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: gehealthcare.com</span>
+                        </div>
+
+                        <p class="">We iterated through three main phases:</p>
+                        <ul class="mb-4 list-disc list-inside">
+                          <li><strong>Phase 1:</strong> First launched in John Hopkins Medicine as Judy Reitz Capacity Command Center in 2016 (AngularJS 1.x)</li>
+                          <li><strong>Phase 2:</strong> Expanded the command center with more modules, core tile concepts, Adoption by more hospitals throughout the world (Angular)</li>
+                          <li><strong>Phase 3:</strong> More complex concepts and modules, no more limited to physical space first approach, wider worldwide adoption (Angular latest)</li>
+                        </ul>
+                        
+                        <p class="">Collaborating with engineers and stakeholders, we refined designs to ensure performance and compliance.</p>
+
+                        <div class="my-10 relative">
+                            <img src="assets/gehc-command-center/bizjournals.com-2.webp" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/>
+                            <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: bizjournals.com</span>
+                        </div>
+
+
+                        <h2 class="font-bold text-xl mb-2">Challenges</h2>
+                        <ul class="list-disc list-inside">
+                          <li><strong>Data complexity:</strong> Simplifying vast, real-time datasets into actionable insights.</li>
+                          <li><strong>Scale & Complexity:</strong> 39+ tiles, including configurable views, without overwhelming users.</li>
+                          <li><strong>Performance:</strong> Optimizing browser-based real-time rendering</li>
+                          <li><strong>Regulatory constraints:</strong> Designing within strict healthcare compliance standards.</li>
+                          <li><strong>Dual Contexts:</strong> Seamless UI for desktop and physical command centers.</li>
+                          <li><strong>Containment:</strong> Tiles couldn&rsquo;t rely on cloud assets (e.g., icons, libraries) outside hospital netwwork or infrastructure due to architecture restrictions.</li>
+                        </ul>
+
+                        <div class="mt-10 relative">
+                          <img src="assets/gehc-command-center/koreaherald.com.webp" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/>
+                          <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: koreaherald.com</span>
+                        </div>
+                        <p class="my-3">Adapting for &UpArrow; physical and desktop &DownArrow; use.</p>
+                        <div class="mb-10 relative">
+                          <img src="assets/gehc-command-center/gehealthcare.com-3.webp" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/>
+                          <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: gehealthcare.com</span>
+                        </div>
+
+                        <h2 class="font-bold text-xl mb-2">Impact</h2>
+                        <p class="">Command Center has been deployed globally, helping hospitals:</p>
+                        <ul class="list-disc list-inside">
+                          <li>Reduce patient length of stay</li>
+                          <li>Improve operational efficiency</li>
+                          <li>Empower leadership to make faster, data-driven decisions</li>
+                        </ul>
+
+                        <div class="my-10 relative">
+                            <img src="assets/gehc-command-center/hrhfoundation.ca-1.webp" alt="GE Healthcare Command Center" class="rounded-lg shadow-lg"/>
+                            <span class="absolute block bottom-2 left-2 text-xs p-1 rounded-sm bg-neutral-900/75 text-neutral-200">source: hrhfoundation.ca</span>
+                        </div>
+
+                        <h2 class="font-bold text-xl mb-2">Lessons Learned:</h2>
+                        <p class="mb-10">Over 11 years on this project, I learned that design principles endure even as tools evolve. This sharpened my skill to simplify enterprise complexity. If I could go back, I&rsquo;d push for more direct, ongoing end-user research rather than relying mainly on product owner input.</p>
+
+                        <p class="mb-4 text-sm text-zinc-400 italic">Official information can be found on the the <a href="https://www.gehccommandcenter.com/" target="_blank" rel="noopener noreferrer"
+                          class="underline underline-offset-2 decoration-zinc-200">GE Healthcare Command Center</a> website.</p>
+                        
                     </div>
+                  </div>
+                </main>
 
-                    <h2 class="font-bold text-xl mb-2">Process</h2>
-                    <ul class="list-disc list-inside">
-                      <li>Started with ideas → sketches → wireframes → prototypes.</li>
-                      <li>Iterated with engineers, product owners, and stakeholders until validated.</li>
-                      <li>Conducted an on-site visit to Humber River Hospital (Toronto) after initial development to observe workflows and interview staff — insights confirmed design choices and highlighted areas for improvement.</li>
-                    </ul>
-
-                     <div class="my-10">
-                        <img src="assets/gehc-command-center/bizjournals.com-5.webp" alt="GE Healthcare Command Center" class="rounded-lg shadow-lg"/>
-                    </div>
-
-                    <h2 class="font-bold text-xl mb-2">Key Solutions and Design Decisions</h2>
-                    <ul class="list-disc list-inside">
-                      <li><strong>Tile System:</strong> 39+ tiles modules used visualizations, iconography, whitespace and hierarchial typography for clarity.</li>
-                      <li><strong>Criticality Encoding:</strong> Icons with badges and color coded context to drive attention, shining at trade shows.</li>
-                      <li><strong>Typography & Hierarchy:</strong> With most tiles being content-heavy, emphasis on clear typography, visual hierarchy, and white space to reduce cognitive load.</li>
-                      <li><strong>Clarity Over Complexity:</strong> Simplified the presentation of massive real-time datasets, ensuring information remained actionable instead of overwhelming.</li>
-                      <li><strong>Context-Aware Views:</strong> Responsive layouts balanced dense data for desktop and physical use.</li>
-                      <li><strong>Iconography:</strong> Built a local dynamic library of more than 700+ icons.</li>
-                    </ul>
-
-                    <div class="my-10">
-                        <img src="assets/gehc-command-center/gehealthcare.com-2.webp" alt="GE Healthcare Command Center" class="rounded-lg shadow-lg"/>
-                    </div>
-
-                    <p class="">We iterated through three phases: (Note to Subi: needs accurate data with dates)</p>
-                    <ul class="mb-4 list-disc list-inside">
-                      <li><strong>Wave 1:</strong> 2-3 years, 7-8 tiles, using Illustrator and Sketch.</li>
-                      <li><strong>Wave 2:</strong> 12-15 tiles across hospitals, in Sketch and Figma.</li>
-                      <li><strong>Wave 3:</strong> 39+ complex tiles with sub-views, all in Figma.</li>
-                    </ul>
-                    
-                    <p class="">Collaborating with engineers and stakeholders, we refined designs to ensure performance and compliance.</p>
-
-                    <div class="my-10">
-                        <img src="assets/gehc-command-center/bizjournals.com-2.webp" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/>
-                    </div>
-
-
-                    <h2 class="font-bold text-xl mb-2">Challenges</h2>
-                    <ul class="list-disc list-inside">
-                      <li><strong>Data complexity:</strong> Simplifying vast, real-time datasets into actionable insights.</li>
-                      <li><strong>Scale & Complexity:</strong> 39+ tiles, including configurable views, without overwhelming users.</li>
-                      <li><strong>Performance:</strong> Optimizing browser-based real-time rendering</li>
-                      <li><strong>Regulatory constraints:</strong> Designing within strict healthcare compliance standards.</li>
-                      <li><strong>Dual Contexts:</strong> Seamless UI for desktop and physical command centers.</li>
-                      <li><strong>Containment:</strong> Tiles couldn’t rely on cloud assets (e.g., icons, libraries) outside hospital netwwork or infrastructure due to architecture restrictions.</li>
-                    </ul>
-
-                    <div class="mt-10"><img src="assets/gehc-command-center/koreaherald.com.webp" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/></div>
-                    <p class="my-3">Adapting for &UpArrow; physical and desktop &DownArrow; use.</p>
-                    <div class="mb-10"><img src="assets/gehc-command-center/gehealthcare.com-3.webp" alt="GE Healthcare Command Center Meeting" class="rounded-lg shadow-lg"/></div>
-
-                    <h2 class="font-bold text-xl mb-2">Impact</h2>
-                    <p class="">Command Center has been deployed globally, helping hospitals:</p>
-                    <ul class="list-disc list-inside">
-                      <li>Reduce patient length of stay</li>
-                      <li>Improve operational efficiency</li>
-                      <li>Empower leadership to make faster, data-driven decisions</li>
-                    </ul>
-
-                     <div class="my-10">
-                        <img src="assets/gehc-command-center/hrhfoundation.ca-1.webp" alt="GE Healthcare Command Center" class="rounded-lg shadow-lg"/>
-                    </div>
-
-                    <h2 class="font-bold text-xl mb-2">Lessons Learned:</h2>
-                    <p class="mb-4">Over 11 years on this project, I learned that design principles endure even as tools evolve. If I could go back, I’d push for more direct, ongoing end-user research rather than relying mainly on product owner input. This sharpened my skill to simplify enterprise complexity.</p>
-                    
-                  </article>
-                </div>
-              </div>
-            </div>
+              </article>
 
           </div>
 
