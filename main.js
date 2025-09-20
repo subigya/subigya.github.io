@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 
     // Setup hover effect
-    const MOBILE_BREAKPOINT = 1024;
+    const MOBILE_BREAKPOINT = 768;
     let isDesktop = window.innerWidth >= MOBILE_BREAKPOINT;
     const hoverBackground = document.getElementById('hover-background');
     let currentTarget = null;
