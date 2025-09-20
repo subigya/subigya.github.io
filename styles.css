@@ -1,45 +1,38 @@
+/* Base hover element styles */
 .hover-style {
     position: relative;
     z-index: 1;
-    color: #222 !important;
+    color: #222;
     text-shadow: 0 1px 4px rgba(255, 255, 255, 0.25);
-    transition: transform 0.2s cubic-bezier(.4, 0, .2, 1);
 }
 
-.hover-style:hover {
-    transform: translateX(1px);
-}
-
-.hover-style:before {
-    content: "";
-    display: block;
-    position: absolute;
-    width: calc(100% + 1.5rem);
-    height: calc(100% + .5rem);
-    top: -.25rem;
-    left: -.75rem;
+/* Hover background effect */
+#hover-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.25);
-    box-sizing: border-box;
+    border-radius: 0.75rem;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    border-radius: .75rem;
-    /* background: rgba(255,255,255,0.15); */
-    /* backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px); */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     opacity: 0;
-    transform: translateY(20px) scale(0.98);
-    transition: opacity 0.4s cubic-bezier(.4, 0, .2, 1), transform 0.4s cubic-bezier(.4, 0, .2, 1);
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, width, height, opacity;
 }
 
-.hover-style:hover:before {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
+/* Page fade in animation */
 .page-animate {
     opacity: 0;
-    transform: translateY(40px);
-    filter: blur(16px);
-    transition: opacity 0.8s cubic-bezier(.4, 0, .2, 1), transform 0.8s cubic-bezier(.4, 0, .2, 1), filter 0.8s cubic-bezier(.4, 0, .2, 1);
+    transform: translateY(20px);
+    filter: blur(8px);
+    transition: all 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity, filter;
 }
 
 .page-animate.page-animate-in {
@@ -48,124 +41,91 @@
     filter: blur(0);
 }
 
-/* Updated animated gradient border for profile image */
-.profile-image-wrap {
-    display: inline-block;
-    padding: 1px;
-    /* Adjusted thickness of the animated border */
-    border-radius: 50%;
-    background: linear-gradient(90deg, #ff7a18, #af002d, #319197, #ff7a18);
-    background-size: 300% 300%;
-    animation: gradientShift 3s ease infinite;
-}
-
-.profile-image {
-    display: block;
-    object-fit: cover;
-    border-radius: 50%;
+/* Image popover styles */
+.image-popover {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     background: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 10;
+    transform: translateY(16px);
+    will-change: transform, opacity;
 }
 
-@keyframes gradientShift {
+.image-popover.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.image-popover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.image-popover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Profile image gradient border animation */
+.profile-image {
+    position: relative;
+    width: 48px !important;
+    height: 48px !important;
+    padding: 2px;
+    border-radius: 9999px;
+    background: white;
+}
+
+.profile-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(
+        from 0deg at 50% 50%,
+        white,
+        #3B82F6 25%,
+        #2DD4BF 50%,
+        #60A5FA 75%,
+        white 100%
+    );
+    animation: rotate 2s linear infinite;
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+.profile-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes rotate {
     0% {
-    background-position: 0% 50%;
+        transform: rotate(0deg);
     }
-
-    50% {
-    background-position: 100% 50%;
-    }
-
     100% {
-    background-position: 0% 50%;
+        transform: rotate(360deg);
     }
 }
-
-
-/* Updated popover styles to enable fade-in, fade-out, and motion */
-    .image-popover {
-      position: absolute;
-      /* Changed to absolute for relative positioning */
-      z-index: 1000;
-      visibility: hidden;
-      /* Use visibility instead of display:none */
-      opacity: 0;
-      /* Start hidden */
-      /* width: 576px; */
-      height: auto;
-      /* max-height: 384px; */
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      background: #fff;
-      overflow: hidden;
-      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
-      /* Smooth fade and motion */
-      transform: translateY(20px);
-      /* Start with downward motion */
-      filter: blur(8px);
-      /* Start blurred */
-    }
-
-    .image-popover img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .image-popover.show {
-      visibility: visible;
-      /* Make visible */
-      opacity: 1;
-      /* Fade in */
-      transform: translateY(0);
-      /* Remove motion */
-      filter: blur(0);
-      /* Remove blur */
-    }
-
-    .page-animate {
-      position: relative;
-      /* Ensure .page-animate is the positioning context */
-    }
-
-    /* Add fade-in and fade-out effect for the popover */
-    .image-popover {
-      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
-      /* Ensure smooth fade and transform */
-      opacity: 0;
-      /* Start hidden */
-    }
-
-    .image-popover.show {
-      opacity: 1;
-      /* Fade in */
-    }
-
-    /* Ensure fade-out animation works */
-    .image-popover {
-      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
-      /* Smooth fade and motion */
-      opacity: 0;
-      /* Default hidden state */
-      visibility: hidden;
-      /* Ensure it's hidden when not shown */
-    }
-
-    .image-popover.show {
-      opacity: 1;
-      /* Fade in */
-      visibility: visible;
-      /* Make visible */
-      transform: translateY(0);
-      /* Remove motion */
-      filter: blur(0);
-      /* Remove blur */
-    }
-
-    .image-popover:not(.show) {
-      opacity: 0;
-      /* Fade out */
-      visibility: hidden;
-      /* Hide after fade-out */
-    }

@@ -1,141 +1,146 @@
-// Shared hover overlay for .hover-style elements
-    document.addEventListener('DOMContentLoaded', function () {
-      const overlay = document.createElement('div');
-      overlay.className = 'shared-hover-overlay';
-      overlay.style.position = 'absolute';
-      overlay.style.pointerEvents = 'none';
-      overlay.style.transition = 'opacity 0.4s cubic-bezier(.4,0,.2,1), left 0.3s cubic-bezier(.4,0,.2,1), top 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1), height 0.3s cubic-bezier(.4,0,.2,1), transform 0.3s cubic-bezier(.4,0,.2,1)';
-      overlay.style.opacity = '0';
-      overlay.style.zIndex = '100';
-      overlay.style.border = '1px solid rgba(255,255,255,0.25)';
-      overlay.style.boxShadow = '0 8px 32px 0 rgba(31, 38, 135, 0.15)';
-      overlay.style.borderRadius = '1rem';
-      overlay.style.background = 'rgba(255,255,255,0.18)';
-      overlay.style.backdropFilter = 'blur(12px)';
-      overlay.style.webkitBackdropFilter = 'blur(12px)';
-      overlay.style.mixBlendMode = 'lighten';
-      overlay.style.pointerEvents = 'none';
-      document.body.appendChild(overlay);
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize page animation
+    setTimeout(() => {
+        document.querySelectorAll('.page-animate').forEach(element => {
+            element.classList.add('page-animate-in');
+        });
+    }, 100);
 
-      let currentHovered = null;
-      let fadeTimeout;
-      let mouseX = 0, mouseY = 0;
+    // Setup hover effect
+    const hoverBackground = document.getElementById('hover-background');
+    let currentTarget = null;
+    let isFirstHover = true;
 
-      function updateOverlay(target, event) {
-        const rect = target.getBoundingClientRect();
-        overlay.style.width = rect.width + 'px';
-        overlay.style.height = rect.height + 'px';
-        overlay.style.left = (rect.left + window.scrollX) + 'px';
-        overlay.style.top = (rect.top + window.scrollY) + 'px';
-        overlay.style.transform = 'scale(1)';
-        overlay.style.opacity = '1';
-        if (event) {
-          mouseX = event.clientX;
-          mouseY = event.clientY;
+    function updateHover(element) {
+        if (!element) return;
+        
+        const rect = element.getBoundingClientRect();
+        const padding = { x: 12, y: 4 };
+
+        if (isFirstHover) {
+            hoverBackground.style.transition = 'none';
+            isFirstHover = false;
+        } else {
+            hoverBackground.style.transition = '';
         }
-      }
-
-      hoverElements.forEach(el => {
-        el.addEventListener('mouseenter', function (e) {
-          clearTimeout(fadeTimeout);
-          currentHovered = el;
-          updateOverlay(el, e);
-        });
-        el.addEventListener('mousemove', function (e) {
-          updateOverlay(el, e);
-        });
-        el.addEventListener('mouseleave', function (e) {
-          // Only fade out if not moving to another .hover-style element
-          const related = e.relatedTarget;
-          if (related && (related.classList && related.classList.contains('hover-style') || related.closest && related.closest('.hover-style'))) {
-            return;
-          }
-          currentHovered = null;
-          fadeTimeout = setTimeout(() => {
-            if (!currentHovered) {
-              overlay.style.opacity = '0';
-              overlay.style.transform = 'scale(0.98)';
+        
+        requestAnimationFrame(() => {
+            // Update size and position
+            hoverBackground.style.width = `${rect.width + padding.x * 2}px`;
+            hoverBackground.style.height = `${rect.height + padding.y * 2}px`;
+            hoverBackground.style.transform = `translate(${rect.left - padding.x}px, ${rect.top - padding.y}px)`;
+            hoverBackground.style.opacity = '1';
+            
+            if (hoverBackground.style.transition === 'none') {
+                requestAnimationFrame(() => {
+                    hoverBackground.style.transition = '';
+                });
             }
-          }, 10);
         });
-      });
+    }
+
+    // Handle mouse movement
+    document.addEventListener('mousemove', (e) => {
+        const target = e.target.closest('.hover-style');
+        
+        if (target) {
+            if (currentTarget !== target) {
+                currentTarget = target;
+                updateHover(target);
+            }
+        } else if (currentTarget) {
+            currentTarget = null;
+            hoverBackground.style.opacity = '0';
+        }
     });
 
-    window.addEventListener('DOMContentLoaded', function () {
-      setTimeout(function () {
-        var main = document.querySelector('.page-animate');
-        if (main) main.classList.add('page-animate-in');
-      }, 100);
+    // Update hover effect on scroll
+    window.addEventListener('scroll', () => {
+        if (currentTarget) updateHover(currentTarget);
+    }, { passive: true });
+    
+    // Update hover effect on resize
+    window.addEventListener('resize', () => {
+        if (currentTarget) updateHover(currentTarget);
+    }, { passive: true });
+
+    // Handle image popovers
+    const contentContainer = document.querySelector('.md\\:flex.md\\:flex-row.md\\:justify-center');
+    const popover = document.createElement('div');
+    popover.className = 'image-popover';
+    document.body.appendChild(popover);
+
+    const img = document.createElement('img');
+    img.addEventListener('load', () => {
+        if (window.innerWidth >= 1024) { // Only show on desktop
+            requestAnimationFrame(() => {
+                popover.classList.add('show');
+            });
+        }
     });
+    popover.appendChild(img);
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Create the popover element
-      const popover = document.createElement('div');
-      popover.className = 'image-popover';
-      const popoverImage = document.createElement('img');
-      popover.appendChild(popoverImage);
-      document.querySelector('.page-animate').appendChild(popover); // Append to .page-animate
+    function updatePopoverPosition() {
+        if (!contentContainer || window.innerWidth < 1024) return;
+        
+        const mainContent = document.querySelector('.md\\:max-w-2xl');
+        const pageAnimateSection = document.querySelector('.page-animate');
+        
+        if (!mainContent || !pageAnimateSection) return;
+        
+        const mainRect = mainContent.getBoundingClientRect();
+        const animateRect = pageAnimateSection.getBoundingClientRect();
+        const popoverWidth = popover.offsetWidth || 384;
 
-      // Default sizes for portrait and landscape orientations
-      const sizes = {
-        portrait: { width: '243px', height: '526px' },
-        landscape: { width: '384px', height: '256px' },
-      };
+        // Update popover position relative to viewport
+        popover.style.left = `${mainRect.right - popoverWidth * 0.75}px`;
+        popover.style.top = `${animateRect.top}px`;
+    }
 
-      // Function to check if the screen is large enough
-      const isLargeScreen = () => window.innerWidth > 1024;
+    // Update position on scroll and resize with throttling
+    let ticking = false;
+    
+    function onScroll() {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                updatePopoverPosition();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }
 
-      // Event listeners for hover-show links
-      const hoverLinks = document.querySelectorAll('.hover-show');
-      hoverLinks.forEach(link => {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updatePopoverPosition, { passive: true });
+
+    const hoverLinks = document.querySelectorAll('.hover-show');
+    hoverLinks.forEach(link => {
+        if (!link.getAttribute('data-image')) return;
+
         link.addEventListener('mouseenter', () => {
-          if (!isLargeScreen()) return; // Disable on small screens
+            if (window.innerWidth <= 1024) return;
 
-          const targetImage = link.getAttribute('data-image'); // Get the target image from data-image attribute
-          const orientation = link.getAttribute('data-orientation') || 'landscape'; // Default to landscape
-
-          if (targetImage) {
-            popoverImage.src = targetImage;
-
-            // Dynamically set the size based on orientation
-            const { width, height } = sizes[orientation] || sizes.landscape;
-            popover.style.width = width;
-            popover.style.height = height;
-
-            // Ensure inline styles take precedence
-            popover.style.setProperty('width', width, 'important');
-            popover.style.setProperty('height', height, 'important');
-
-            // Position relative to the hovered trigger element
-            const triggerRect = link.getBoundingClientRect();
-            popover.style.right = `-${parseInt(width) / 1.25}px`;
-            popover.style.top = `0px`;
-
-            // Cancel any ongoing fade-out animation
-            clearTimeout(popover.fadeTimeout);
-
-            // Reset animation state
+            const orientation = link.getAttribute('data-orientation') || 'landscape';
+            
+            // Update image and reset popover state
             popover.classList.remove('show');
-            setTimeout(() => {
-              popover.classList.add('show');
-            }, 10); // Slight delay to re-trigger animation
-          }
+            img.src = link.getAttribute('data-image');
+
+            // Apply size based on orientation
+            if (orientation === 'portrait') {
+                popover.style.width = '243px';
+                popover.style.height = '526px';
+            } else {
+                popover.style.width = '384px';
+                popover.style.height = '256px';
+            }
+
+            // Update position
+            updatePopoverPosition();
         });
 
         link.addEventListener('mouseleave', () => {
-          if (!isLargeScreen()) return; // Disable on small screens
-
-          // Add a delay before hiding to allow for smooth transitions
-          popover.fadeTimeout = setTimeout(() => {
             popover.classList.remove('show');
-          }, 50); // Short delay to ensure animation plays
         });
-      });
-
-      // Hide the popover on window resize if the screen becomes small
-      window.addEventListener('resize', () => {
-        if (!isLargeScreen()) {
-          popover.classList.remove('show');
-        }
-      });
     });
+});

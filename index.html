@@ -15,6 +15,8 @@
 </head>
 
 <body class="">
+  <!-- Single hover background element -->
+  <div id="hover-background"></div>
 
   <div class="md:flex md:flex-row md:justify-center">
 
@@ -26,11 +28,9 @@
 
           <div class="flex flex-col gap-12 origin-left">
 
-            <div class="h-12 w-12 profile-image">
-                <a aria-label="Go to Homepage" href="#">
-                  <img alt="Subigya Shakya Logo" src="https://subigya.github.io/assets/profile/subi-subigya-shakya.jpg" width="200" height="200"
-                    class="rounded-full" />
-                </a>
+            <div class="h-12 w-12">
+                  <img alt="Subigya Shakya Logo" src="https://subigya.github.io/assets/profile/subi-subigya-shakya.jpg" width="48" height="48"
+                    class="rounded-full border border-white" />                
               </div>
 
             <div class="flex flex-row">
@@ -53,9 +53,9 @@
               </ul>
             </div>
 
-            <div class="flex flex-col page-animate gap-10">
+            <div class="flex flex-col gap-10 page-animate">
 
-              <div class="flex flex-col gap-2">
+              <div class="flex flex-col gap-2 hover-section">
                 <h3 class="text-xs uppercase text-zinc-400">Case Studies</h3>
                 <div class="flex flex-col gap-4">
                   <div class="flex flex-col gap-1 inline w-fit">
@@ -77,7 +77,7 @@
                 </div>
               </div>
 
-              <div class="flex flex-col gap-1">
+              <div class="flex flex-col gap-1 hover-section">
                 <h3 class="text-xs uppercase text-zinc-400">Patent</h3>
                 <div class="flex flex-col gap-4">
 
@@ -92,7 +92,7 @@
                 </div>
               </div>
 
-              <div class="flex flex-col gap-1">
+              <div class="flex flex-col gap-1 hover-section">
                 <h3 class="text-xs uppercase text-zinc-400">Links</h3>
                 <div class="flex flex-col gap-4">
                   <div class="inline w-fit">
@@ -164,6 +164,8 @@
       </div>
 
     </div>
+<!-- Add a shared hover-style element to the DOM -->
+<div id="hover-background"></div>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-92C1R0YES6"></script>
 <script>
