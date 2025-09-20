@@ -7,31 +7,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 
     // Setup hover effect
+    const MOBILE_BREAKPOINT = 1024;
+    let isDesktop = window.innerWidth >= MOBILE_BREAKPOINT;
     const hoverBackground = document.getElementById('hover-background');
     let currentTarget = null;
-    let isFirstHover = true;
 
-    function updateHover(element) {
-        if (!element) return;
+    function updateHover(element, instant = false) {
+        if (!element || !isDesktop) return;
         
         const rect = element.getBoundingClientRect();
         const padding = { x: 12, y: 4 };
 
-        if (isFirstHover) {
+        if (instant) {
             hoverBackground.style.transition = 'none';
-            isFirstHover = false;
-        } else {
-            hoverBackground.style.transition = '';
         }
         
         requestAnimationFrame(() => {
             // Update size and position
             hoverBackground.style.width = `${rect.width + padding.x * 2}px`;
             hoverBackground.style.height = `${rect.height + padding.y * 2}px`;
-            hoverBackground.style.transform = `translate(${rect.left - padding.x}px, ${rect.top - padding.y}px)`;
+            hoverBackground.style.transform = `translate3d(${rect.left - padding.x}px, ${rect.top - padding.y}px, 0)`;
             hoverBackground.style.opacity = '1';
             
-            if (hoverBackground.style.transition === 'none') {
+            if (instant) {
                 requestAnimationFrame(() => {
                     hoverBackground.style.transition = '';
                 });
@@ -39,14 +37,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Track window resize for mobile/desktop switch
+    window.addEventListener('resize', () => {
+        isDesktop = window.innerWidth >= MOBILE_BREAKPOINT;
+        if (!isDesktop) {
+            hoverBackground.style.opacity = '0';
+            hoverBackground.style.transform = 'none';
+            currentTarget = null;
+        } else if (currentTarget) {
+            updateHover(currentTarget, true);
+        }
+    }, { passive: true });
+
     // Handle mouse movement
     document.addEventListener('mousemove', (e) => {
+        if (!isDesktop) return;
+        
         const target = e.target.closest('.hover-style');
         
         if (target) {
             if (currentTarget !== target) {
                 currentTarget = target;
-                updateHover(target);
+                updateHover(target, currentTarget === null);
             }
         } else if (currentTarget) {
             currentTarget = null;
@@ -54,14 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Update hover effect on scroll
+    // Update on scroll
     window.addEventListener('scroll', () => {
-        if (currentTarget) updateHover(currentTarget);
-    }, { passive: true });
-    
-    // Update hover effect on resize
-    window.addEventListener('resize', () => {
-        if (currentTarget) updateHover(currentTarget);
+        if (currentTarget && isDesktop) {
+            updateHover(currentTarget);
+        }
     }, { passive: true });
 
     // Handle image popovers
