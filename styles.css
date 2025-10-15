@@ -75,6 +75,14 @@
     display: block;
 }
 
+.image-popover video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: #fff;
+}
+
 .image-popover img {
     width: 100%;
     height: 100%;

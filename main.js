@@ -73,21 +73,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: true });
 
-    // Handle image popovers
+    // Handle image and video popovers
     const contentContainer = document.querySelector('.md\\:flex.md\\:flex-row.md\\:justify-center');
     const popover = document.createElement('div');
     popover.className = 'image-popover';
     document.body.appendChild(popover);
 
+    // Create and preload video element
+    const video = document.createElement('video');
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.autoplay = true;
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.objectFit = 'contain';
+    
+    video.addEventListener('error', (e) => {
+        console.error('Video error:', e);
+    });
+    
+    // Create image element
     const img = document.createElement('img');
-    img.addEventListener('load', () => {
-        if (window.innerWidth >= 1024) { // Only show on desktop
+    
+    function showPopover() {
+        if (window.innerWidth >= 1024) {
             requestAnimationFrame(() => {
                 popover.classList.add('show');
+                popover.style.opacity = '';
             });
         }
+    }
+    
+    img.addEventListener('load', showPopover);
+    video.addEventListener('loadeddata', () => {
+        console.log('Video loaded');
+        showPopover();
     });
-    popover.appendChild(img);
 
     function updatePopoverPosition() {
         if (!contentContainer || window.innerWidth < 1024) return;
@@ -124,16 +146,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const hoverLinks = document.querySelectorAll('.hover-show');
     hoverLinks.forEach(link => {
-        if (!link.getAttribute('data-image')) return;
+        const hasImage = link.hasAttribute('data-image');
+        const hasVideo = link.hasAttribute('data-video');
+        if (!hasImage && !hasVideo) return;
+
+        // We'll load the video on hover instead of preloading
+        if (hasVideo) {
+            console.log('Found video link:', link.getAttribute('data-video'));
+        }
 
         link.addEventListener('mouseenter', () => {
             if (window.innerWidth <= 1024) return;
 
             const orientation = link.getAttribute('data-orientation') || 'landscape';
             
-            // Update image and reset popover state
+            // Immediately hide any previous content
             popover.classList.remove('show');
-            img.src = link.getAttribute('data-image');
+            popover.style.opacity = '0';
+            
+            // Clear previous content
+            popover.innerHTML = '';
+            
+            // Add appropriate media element
+            if (hasVideo) {
+                console.log('Loading video:', link.getAttribute('data-video'));
+                video.src = link.getAttribute('data-video');
+                popover.appendChild(video);
+                video.load();
+                video.play().catch(err => console.error('Video play error:', err));
+            } else {
+                img.src = link.getAttribute('data-image');
+                popover.appendChild(img);
+            }
 
             // Apply size based on orientation
             if (orientation === 'portrait') {
@@ -150,6 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         link.addEventListener('mouseleave', () => {
             popover.classList.remove('show');
+            popover.style.opacity = '0';
+            if (hasVideo) {
+                video.pause();
+                video.currentTime = 0;
+            }
         });
     });
 });
